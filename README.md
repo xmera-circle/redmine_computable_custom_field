@@ -1,4 +1,6 @@
-# This project is no longer maintained
+# This project was taken over from annikoff 
+
+see also
 
 ## ComputedCustomField plugin for Redmine
 
