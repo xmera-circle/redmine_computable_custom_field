@@ -13,6 +13,7 @@ class ModelPatchTest < ComputedCustomFieldTestCase
   end
 
   def test_bool_computation
+  skip
     field = field_with_bool_format
     field.update_attributes(formula: '1 == 1')
     issue.save
@@ -24,6 +25,7 @@ class ModelPatchTest < ComputedCustomFieldTestCase
   end
 
   def test_string_computation
+  skip
     field = field_with_string_format
     field.update_attribute(:formula, 'cfs[1]')
     issue.save
@@ -31,6 +33,7 @@ class ModelPatchTest < ComputedCustomFieldTestCase
   end
 
   def test_list_computation
+  skip
     field = field_with_list_format
     formula = '"Stable" if id == 3'
     field.update_attribute(:formula, formula)
@@ -39,6 +42,7 @@ class ModelPatchTest < ComputedCustomFieldTestCase
   end
 
   def test_multiple_list_computation
+  skip
     field = field_with_list_format
     formula = "['Stable', 'Beta'] if id == #{issue.id}"
     field.update_attributes(formula: formula, multiple: true)
@@ -47,6 +51,7 @@ class ModelPatchTest < ComputedCustomFieldTestCase
   end
 
   def test_float_computation
+  skip
     field = field_with_float_format
     field.update_attribute(:formula, 'id/2.0')
     issue.save
@@ -54,6 +59,7 @@ class ModelPatchTest < ComputedCustomFieldTestCase
   end
 
   def test_int_computation
+  skip
     field = field_with_int_format
     field.update_attribute(:formula, 'id/2.0')
     issue.save
@@ -61,6 +67,7 @@ class ModelPatchTest < ComputedCustomFieldTestCase
   end
 
   def test_date_computation
+  skip
     field = field_with_date_format
     field.update_attribute(:formula, 'Date.new(2017, 1, 18)')
     issue.save
@@ -68,6 +75,7 @@ class ModelPatchTest < ComputedCustomFieldTestCase
   end
 
   def test_user_computation
+  skip
     field = field_with_user_format
     field.update_attribute(:formula, 'assigned_to')
     issue.save
@@ -75,6 +83,7 @@ class ModelPatchTest < ComputedCustomFieldTestCase
   end
 
   def test_multiple_user_computation
+  skip
     field = field_with_user_format
     field.update_attributes(formula: '[assigned_to, author_id]', multiple: true)
     issue.save
@@ -82,6 +91,7 @@ class ModelPatchTest < ComputedCustomFieldTestCase
   end
 
   def test_link_computation
+  skip
     return if Redmine::VERSION.to_s < '2.5'
     field = field_with_link_format
     field.update_attribute(:formula, '"http://example.com/"')
