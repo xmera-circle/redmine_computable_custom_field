@@ -1,38 +1,47 @@
 class CustomFieldCalculator
-  attr_reader :formula, :reg_expr
+  attr_reader :formula, :reg_expr, :cf_pattern, :op_pattern, :fields
 
-  def initialize(formula)
+  def initialize(formula:, fields: CustomField.computable)
     @formula = formula
     @reg_expr = Regexp.new('(cfs\[\d+\])(\+|\-|\/|\*)(cfs\[\d+\])')
+    @cf_pattern = Regexp.new('(cfs\[\d+\])')
+    @op_pattern = Regexp.new('(\+|\-|\/|\*)')
+    @fields = fields
   end
 
-  def calculate 
-    case operator
-      when '+'
-        cf_values.sum
-      when '-'
-        negativ = [cf_values.first, -cf_values.last]
-        negativ.sum
-    end
+  def calculate
+    eval sanitized_formula.join
   end
 
-  ##
-  # Only for validation purposes
-  #
-  def cf_values
-    cf_ids.each_with_object([]) do |cf_id, values|
-      field = grouped_cf[cf_id]
-      field_value = field ? field.first.cast_value(1) : -2
-      values << (field_value.is_a?(Integer) ? field_value : -2)
+  def validate
+    return true if formula.blank?
+
+    raise 'Unvalid operator' unless valid_operators?
+    raise 'Unvalid custom fields' unless valid_field?
+    raise 'Unvalid custom fields' unless valid_result?
+  end
+
+  private
+
+  def cfs
+    vals = cf_ids.each_with_object({}) do |cf_id, hash|
+      cfv = grouped_cf[cf_id].first
+      value = case cfv.is_a? CustomField
+              when true
+                cfv ? cfv.cast_value(1) : -2
+              when false
+                cfv ? cfv.custom_field.cast_value(cfv.value) : nil
+              end
+      hash[cf_id] = value
     end
+    vals
   end
 
   def cf_ids
-    ids = items.map do |item|
+    ids = extracted_cfs.map do |item|
       item.scan(/cfs\[(\d+)\]/)
     end
     ids.flatten!
-    ids.compact!
     ids.map!(&:to_i)
   end
 
@@ -40,11 +49,26 @@ class CustomFieldCalculator
     formula.scan(reg_expr).flatten
   end
 
-  def operator
-    (items & valid_operators).first
+  ##
+  # @return [Array(String)] All valid elements each as entry in an array.
+  #
+  def sanitized_formula
+    extracted_cfs.zip(extracted_ops).flatten.compact
   end
 
-  def valid_operators
+  def extracted_cfs
+    formula.scan(cf_pattern).flatten
+  end
+
+  def extracted_ops
+    formula.scan(op_pattern).flatten
+  end
+
+  def valid_operators?
+    extracted_ops.present?
+  end
+
+  def available_operators
     %w[+ - * /]
   end
 
@@ -52,15 +76,19 @@ class CustomFieldCalculator
     [2, 0, 1].include? calculate
   end
 
+  def valid_field?
+    (formats.uniq - %w[int float]).blank?
+  end
+
   def grouped_cf
-    CustomField.all.group_by(&:id)
+    return fields.group_by(&:id) if fields.is_a? ActiveRecord::Relation
+
+    fields.group_by { |cfv| cfv.custom_field.id }
   end
 
-  def validate
-    return true if formula.blank?
+  def formats
+    return fields.map(&:field_format) if fields.is_a? ActiveRecord::Relation
 
-    raise 'Unvalid operator' unless operator
-    raise 'Unvalid custom fields' unless valid_result?
+    fields.map(&:custom_field).map(&:field_format)
   end
-
 end

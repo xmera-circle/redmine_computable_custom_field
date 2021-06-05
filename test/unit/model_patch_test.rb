@@ -3,13 +3,30 @@ require File.expand_path('../../test_helper', __FILE__)
 class ModelPatchTest < ComputedCustomFieldTestCase
   def test_invalid_computation
     field = field_with_string_format
-    field.update_attribute(:formula, '1/0')
-    exception = assert_raise ActiveRecord::RecordInvalid do
-      issue.save!
+    message = 'Validation failed: Formula Unvalid custom fields'
+    assert_raise ActiveRecord::RecordInvalid, message do
+      field.update!(formula: 'cfs[1]+cfs[6]')
     end
-    message = 'Validation failed: Error while formula computing in field ' \
-              "\"#{field.name}\": divided by 0"
-    assert_equal message, exception.message
+    issue.save
+    assert_equal '', issue.custom_field_value(field.id)
+  end
+
+  def test_sum_with_int_format
+    field = field_with_int_format
+    formula = 'cfs[6]+cfs[6]+cfs[6]'
+    result = (3 * issue.custom_field_value(6).to_f).truncate.to_s
+    field.update_attribute(:formula, formula)
+    issue.save
+    assert_equal result, issue.custom_field_value(field.id)
+  end
+
+  def test_sum_with_float_format
+    field = field_with_float_format
+    formula = 'cfs[6]+cfs[6]-cfs[6]'
+    result = (1 * issue.custom_field_value(6).to_f).to_s
+    field.update_attribute(:formula, formula)
+    issue.save
+    assert_equal result, issue.custom_field_value(field.id)
   end
 
   def test_bool_computation
