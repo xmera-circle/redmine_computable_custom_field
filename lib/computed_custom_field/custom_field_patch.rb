@@ -6,7 +6,8 @@ module ComputedCustomField
       before_validation -> { self.formula ||= '' }, if: :is_computed?
       validates_with FormulaValidator, if: :is_computed?
       safe_attributes 'is_computed', 'formula' if CustomField.respond_to? 'safe_attributes'
-      scope :computable, -> { where(is_computed: false).where(field_format: %w[int float]) }
+      scope :computable, -> { where(is_computed: false).where(field_format: ComputedCustomField::FORMATS) }
+      scope :computable_group_by_id, -> { computable.group_by.map(&:id) }
     end
 
     def is_computed=(arg)

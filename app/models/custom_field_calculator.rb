@@ -1,36 +1,45 @@
+##
+# This class is responsible for executing the validation upon field creation
+# and the calculation of the field value in any model. This is not optimal!
+# TODO: Separate the validation capabilities for the calcuation.
+#
 class CustomFieldCalculator
-  attr_reader :formula, :reg_expr, :cf_pattern, :op_pattern, :fields
+  attr_reader :formula, :fields, :context, :record
 
-  def initialize(formula:, fields: CustomField.computable)
-    @formula = formula
-    @reg_expr = Regexp.new('(cfs\[\d+\])(\+|\-|\/|\*)(cfs\[\d+\])')
-    @cf_pattern = Regexp.new('(cfs\[\d+\])')
-    @op_pattern = Regexp.new('(\+|\-|\/|\*)')
+  def initialize(formula:, fields:, context:,record:)
+    @formula = Formula.new(expression: formula)
     @fields = fields
+    @context = FormulaContext.new(field_ids: FormulaFragment.new(arguments: formula.arguments), 
+                                  available_fields: fields)
+    @record = record
   end
 
   def calculate
-    eval sanitized_formula.join
+    MathFunction.new(name: formula.name,
+                     arguments: formula.arguments,
+                     context: context).calculate
+  #  eval sanitized_formula.join if cfs.values.all?
   end
 
   def validate
     return true if formula.blank?
+    return record.errors.add(:base, 'Invalid custom fields') unless valid_field?
 
-    raise 'Unvalid operator' unless valid_operators?
-    raise 'Unvalid custom fields' unless valid_field?
-    raise 'Unvalid custom fields' unless valid_result?
+    record.errors.add(:base, 'Invalid custom fields') unless valid_result?
   end
 
   private
 
   def cfs
     vals = cf_ids.each_with_object({}) do |cf_id, hash|
-      cfv = grouped_cf[cf_id].first
+      cfv = grouped_cf[cf_id]&.first
       value = case cfv.is_a? CustomField
               when true
                 cfv ? cfv.cast_value(1) : -2
               when false
                 cfv ? cfv.custom_field.cast_value(cfv.value) : nil
+              else
+                nil
               end
       hash[cf_id] = value
     end
@@ -43,10 +52,6 @@ class CustomFieldCalculator
     end
     ids.flatten!
     ids.map!(&:to_i)
-  end
-
-  def items
-    formula.scan(reg_expr).flatten
   end
 
   ##

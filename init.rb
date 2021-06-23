@@ -1,3 +1,5 @@
+require 'computed_custom_field'
+
 Redmine::Plugin.register :computed_custom_field do
   name 'Computed custom field'
   author 'Yakov Annikov'
@@ -19,10 +21,14 @@ end
 preparation_class.to_prepare do
   require_dependency 'computed_custom_field/computed_custom_field'
   require_dependency 'computed_custom_field/custom_field_patch'
+  require_dependency 'computed_custom_field/custom_field_value_patch'
   require_dependency 'computed_custom_field/custom_fields_helper_patch'
   require_dependency 'computed_custom_field/model_patch'
   require_dependency 'computed_custom_field/issue_patch'
   require_dependency 'computed_custom_field/hooks'
+  require_dependency 'computed_custom_field/field_format_patch'
+  require_dependency 'computed_custom_field/all_formula_patch'
+  require_dependency 'computed_custom_field/min_max_formula_patch'
 end
 
 RedmineApp::Application.configure do

@@ -11,20 +11,20 @@ module ComputedCustomField
     def eval_computed_fields
       custom_field_values.each do |value|
         next unless value.custom_field.is_computed?
+
         eval_computed_field value.custom_field
       end
     end
 
     def eval_computed_field(custom_field)
-      value = CustomFieldCalculator.new(formula: custom_field.formula,
-                                        fields: fields).calculate
-      self.custom_field_values = {
-        custom_field.id => prepare_computed_value(custom_field, value)
-      }
-    rescue Exception => e
-      errors.add :base, l(:error_while_formula_computing,
-                          custom_field_name: custom_field.name,
-                          message: e.message)
+      ActiveRecord::Base.transaction do
+        value = CustomFieldCalculator.new(formula: custom_field.formula,
+                                          fields: fields,
+                                          record: self).calculate
+        self.custom_field_values = {
+          custom_field.id => prepare_computed_value(custom_field, value)
+        }
+      end
     end
 
     def prepare_computed_value(custom_field, value)
