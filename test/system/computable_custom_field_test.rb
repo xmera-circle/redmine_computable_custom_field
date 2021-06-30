@@ -5,7 +5,7 @@
 #
 # Copyright (C) 2021 Liane Hampe <liaham@xmera.de>, xmera.
 # Copyright (C) 2015 - 2021 Yakov Annikov
-# 
+#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -99,12 +99,7 @@ class ComputableCustomFieldTest < ApplicationSystemTestCase
 
   test 'available cfs if none' do
     visit new_custom_field_path type: 'TimeEntryCustomField'
-    within('#custom_field_form') do
-      computed_element.click
-      find(:css, '#available_cfs').find(:option, ' ').double_click
-    end
-    assert_equal 'cfs[ ]', formula_element.value
-    assert_equal 1, page.all('#available_cfs option').size
+    assert page.has_no_css?('#available_cfs')
   end
 
   private

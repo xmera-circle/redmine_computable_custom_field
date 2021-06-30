@@ -5,7 +5,7 @@
 #
 # Copyright (C) 2021 Liane Hampe <liaham@xmera.de>, xmera.
 # Copyright (C) 2015 - 2021 Yakov Annikov
-# 
+#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -28,7 +28,7 @@ module ComputableCustomField
     end
 
     def render_options_for_computable_custom_fields_select(custom_field)
-      options = custom_fields_for_options(custom_field).map do |field|
+      options = custom_field.fields_for_select.map do |field|
         is_computed = field.is_computed? ? ", #{l(:field_is_computed)}" : ''
         format = I18n.t(field.format.label)
         title = "#{field.name} (#{format}#{is_computed}, #{field.id})"
@@ -37,10 +37,6 @@ module ComputableCustomField
       return content_tag(:option, l(:label_no_data), value: ' ', title: l(:label_no_data)) if options.blank?
 
       options.join.html_safe
-    end
-
-    def custom_fields_for_options(custom_field)
-      custom_field.class.computable
     end
   end
 end

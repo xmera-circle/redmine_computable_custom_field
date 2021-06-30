@@ -36,6 +36,5 @@ require 'computable_custom_field/overrides/enumeration_format_patch'
 module ComputableCustomField
   FORMATS = %w[int float list enumeration].freeze
   FORMULAS = %w[sum min max product division custom].freeze
-  MODELS = [Enumeration, Group, Issue, Project,
-            TimeEntry, User, Version].freeze
+  MODELS = [Issue].freeze
 end

@@ -5,7 +5,7 @@
 #
 # Copyright (C) 2021 Liane Hampe <liaham@xmera.de>, xmera.
 # Copyright (C) 2015 - 2021 Yakov Annikov
-# 
+#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -24,7 +24,8 @@ require File.expand_path('../test_helper', __dir__)
 
 class ModelPatchTest < ComputableCustomFieldTestCase
   test 'patch inclusion' do
-    models = [Enumeration, Group, Issue, Project, TimeEntry, User, Version]
+    models = ComputableCustomField::MODELS
+    assert_equal 1, models.size
     models.each do |model|
       assert model.included_modules.include?(ComputableCustomField::ModelPatch)
     end

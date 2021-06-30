@@ -5,7 +5,7 @@
 #
 # Copyright (C) 2021 Liane Hampe <liaham@xmera.de>, xmera.
 # Copyright (C) 2015 - 2021 Yakov Annikov
-# 
+#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -38,8 +38,22 @@ module ComputableCustomField
       super if new_record?
     end
 
+    def valid_type_for_computation?
+      type_from_class_name.present?
+    end
+
     def valid_format_for_computation?
       format_in?(*ComputableCustomField::FORMATS)
+    end
+
+    def fields_for_select
+      self.class.computable
+    end
+
+    private
+
+    def type_from_class_name
+      self.class.name.scan(Regexp.new(ComputableCustomField::MODELS.join('|')))
     end
   end
 end
