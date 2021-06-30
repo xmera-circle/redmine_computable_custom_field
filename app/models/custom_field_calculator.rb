@@ -1,99 +1,42 @@
-##
-# This class is responsible for executing the validation upon field creation
-# and the calculation of the field value in any model. This is not optimal!
-# TODO: Separate the validation capabilities for the calcuation.
-#
-class CustomFieldCalculator
-  attr_reader :formula, :fields, :context, :record
+# frozen_string_literal: true
 
-  def initialize(formula:, fields:, context:,record:)
+#
+# Redmine plugin for xmera called Computable Custom Field Plugin.
+#
+# Copyright (C) 2021 Liane Hampe <liaham@xmera.de>, xmera.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
+
+class CustomFieldCalculator
+  def initialize(formula:, fields:, grouped_fields:)
     @formula = Formula.new(expression: formula)
     @fields = fields
-    @context = FormulaContext.new(field_ids: FormulaFragment.new(arguments: formula.arguments), 
-                                  available_fields: fields)
-    @record = record
+    @grouped_fields = grouped_fields
+    @fragments = FormulaFragment.new(arguments: self.formula.arguments)
+    @context = FormulaContext.new(field_ids: fragments.ids,
+                                  grouped_fields: self.grouped_fields,
+                                  available_fields: self.fields)
   end
 
   def calculate
     MathFunction.new(name: formula.name,
-                     arguments: formula.arguments,
+                     fragments: fragments,
                      context: context).calculate
-  #  eval sanitized_formula.join if cfs.values.all?
-  end
-
-  def validate
-    return true if formula.blank?
-    return record.errors.add(:base, 'Invalid custom fields') unless valid_field?
-
-    record.errors.add(:base, 'Invalid custom fields') unless valid_result?
   end
 
   private
 
-  def cfs
-    vals = cf_ids.each_with_object({}) do |cf_id, hash|
-      cfv = grouped_cf[cf_id]&.first
-      value = case cfv.is_a? CustomField
-              when true
-                cfv ? cfv.cast_value(1) : -2
-              when false
-                cfv ? cfv.custom_field.cast_value(cfv.value) : nil
-              else
-                nil
-              end
-      hash[cf_id] = value
-    end
-    vals
-  end
-
-  def cf_ids
-    ids = extracted_cfs.map do |item|
-      item.scan(/cfs\[(\d+)\]/)
-    end
-    ids.flatten!
-    ids.map!(&:to_i)
-  end
-
-  ##
-  # @return [Array(String)] All valid elements each as entry in an array.
-  #
-  def sanitized_formula
-    extracted_cfs.zip(extracted_ops).flatten.compact
-  end
-
-  def extracted_cfs
-    formula.scan(cf_pattern).flatten
-  end
-
-  def extracted_ops
-    formula.scan(op_pattern).flatten
-  end
-
-  def valid_operators?
-    extracted_ops.present?
-  end
-
-  def available_operators
-    %w[+ - * /]
-  end
-
-  def valid_result?
-    [2, 0, 1].include? calculate
-  end
-
-  def valid_field?
-    (formats.uniq - %w[int float]).blank?
-  end
-
-  def grouped_cf
-    return fields.group_by(&:id) if fields.is_a? ActiveRecord::Relation
-
-    fields.group_by { |cfv| cfv.custom_field.id }
-  end
-
-  def formats
-    return fields.map(&:field_format) if fields.is_a? ActiveRecord::Relation
-
-    fields.map(&:custom_field).map(&:field_format)
-  end
+  attr_reader :formula, :fields, :grouped_fields, :fragments, :context
 end

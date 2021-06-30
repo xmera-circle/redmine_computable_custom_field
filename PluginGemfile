@@ -1,5 +1,0 @@
-if ENV['RAILS_ENV'] == 'development'
-  group :development do
-  #  gem 'rubocop', require: false
-  end
-end

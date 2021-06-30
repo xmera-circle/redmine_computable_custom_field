@@ -1,4 +1,34 @@
-# Change Log
+# Changelog for Redmine Cumputable Custom Field
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## 3.0.0 - 2021-06-30
+
+### Added
+
+* explicit formula functions: sum(), min(), max(), division(), product(), custom()
+* computable list fields for lists with numbers as entries (int, float) and
+  enumeration lists where there position is used for calculation
+
+### Changed
+
+* plugin name to *redmine_computable_custom_field* in order to separate it from
+  the original plugin due to the substantial reengineering
+* the license to GNU GPL v2 due to substantial reengineering
+
+## 2.0.0 - 2021-06-05
+
+### Added
+
+* support for formulas containing only custom fields and +, -, *, / operators
+
+### Deleted
+
+* support for arbitrary code evaluation in a formula in favour of security
+
 
 ## [1.0.7](https://github.com/annikoff/redmine_plugin_computed_custom_field/releases/tag/v1.0.7) - 2019-01-13
 ### Added

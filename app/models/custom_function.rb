@@ -4,7 +4,7 @@
 # Redmine plugin for xmera called Computable Custom Field Plugin.
 #
 # Copyright (C) 2021 Liane Hampe <liaham@xmera.de>, xmera.
-# 
+#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -19,29 +19,33 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
-class MathFunction
-  def initialize(name:, fragments:, context:)
-    @name = name
-    @fragments = fragments
-    @context = context
+class CustomFunction < BaseFunction
+  # The formula as provided by the user was fragmented in valid
+  # components and recombined as sanitized formula before it is
+  # evaluated below.
+  def calculate
+    eval(sanitized_formula) # rubocop:disable Security/Eval
   end
 
-  def calculate
-    base_function.calculate
+  def available_operators
+    %w[+ - * /]
+  end
+
+  def available_delimiters
+    []
+  end
+
+  def available_signs
+    %w[+ -]
   end
 
   private
 
-  attr_reader :name, :fragments, :context
-
-  ##
-  # The function determined by the formula name, e.g., SumFunction.
-  #
-  def base_function
-    klass.new(fragments: fragments, context: context)
+  def sanitized_formula
+    values.zip(operators).flatten.compact.join(' ')
   end
 
-  def klass
-    name.present? ? "#{name.classify}Function".constantize : NullFunction
+  def operators
+    fragments.operator
   end
 end

@@ -3,10 +3,7 @@ AllCops:
     - 'db/**/*'
   DisplayCopNames: true
   DisplayStyleGuide: true
-  TargetRubyVersion: 2.6
-
-Lint/RescueException:
-  Enabled: false
+  TargetRubyVersion: 2.7
 
 Metrics/AbcSize:
   Exclude:
@@ -19,20 +16,5 @@ Metrics/MethodLength:
 Metrics/LineLength:
   Max: 120
 
-Style/ClassAndModuleChildren:
-  Enabled: false
-
 Style/Documentation:
-  Enabled: false
-
-Style/ExpandPathArguments:
-  Enabled: false
-
-Style/FrozenStringLiteralComment:
-  Enabled: false
-
-Style/PredicateName:
-  Enabled: false
-
-Style/SymbolArray:
   Enabled: false

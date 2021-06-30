@@ -1,0 +1,18 @@
+de:
+  field_is_computed: Berechenbar
+  field_formula: Formel
+
+  label_available_custom_fields: Geeignete Felder
+  
+  text_supported_formulas: 'Es werden min(), max(), sum(), product(), division(), 
+    custom() unterstützt. Beispiele: sum(cfs[1], cfs[2]), custom(cfs[1] + cfs[2] * cfs[3])'
+  text_double_click_on_available_field: Das gewünschte Feld mit einem Doppelklick
+    in das Formelfeld übertragen.
+  
+  error_unknown_formula: Unbekannte Formel
+  error_unsupported_formula: Formel wird für dieses Format nicht unterstützt
+  error_missing_fields: Felder müssen angegeben werden
+  error_missing_arguments: Ungültige Operatoren oder Trennzeichen
+  error_invalid_arguments: Ungültige Formelsyntax
+  error_unsupported_field_format: Ungeignetes Format für ein oder mehrere Felder
+  error_invalid_field: Ungeeignetes Feld

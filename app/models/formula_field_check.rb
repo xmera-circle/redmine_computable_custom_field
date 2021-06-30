@@ -4,7 +4,7 @@
 # Redmine plugin for xmera called Computable Custom Field Plugin.
 #
 # Copyright (C) 2021 Liane Hampe <liaham@xmera.de>, xmera.
-# 
+#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -19,29 +19,28 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
-class MathFunction
-  def initialize(name:, fragments:, context:)
-    @name = name
-    @fragments = fragments
-    @context = context
+class FormulaFieldCheck
+  include Redmine::I18n
+
+  def initialize(field_ids:)
+    @field_ids = field_ids
   end
 
-  def calculate
-    base_function.calculate
+  def validate(record)
+    record.errors.add :base, l(:error_invalid_field) unless available_fields?(record)
+    results = custom_fields(record).map(&:valid_format_for_computation?)
+    record.errors.add :base, l(:error_unsupported_field_format) unless results.all?
   end
 
   private
 
-  attr_reader :name, :fragments, :context
+  attr_reader :field_ids
 
-  ##
-  # The function determined by the formula name, e.g., SumFunction.
-  #
-  def base_function
-    klass.new(fragments: fragments, context: context)
+  def available_fields?(record)
+    (field_ids - custom_fields(record).pluck(:id)).empty?
   end
 
-  def klass
-    name.present? ? "#{name.classify}Function".constantize : NullFunction
+  def custom_fields(record)
+    record.class.where(id: field_ids)
   end
 end

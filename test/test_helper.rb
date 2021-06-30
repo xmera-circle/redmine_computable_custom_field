@@ -1,16 +1,30 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../../test/test_helper')
-require File.expand_path('../fixtures_helper', __FILE__)
-require File.expand_path('../methods_helper', __FILE__)
+# frozen_string_literal: true
+#
+# Redmine plugin for xmera called Computable Custom Field Plugin.
+#
+# Copyright (C) 2021 Liane Hampe <liaham@xmera.de>, xmera.
+# Copyright (C) 2015 - 2021 Yakov Annikov
+# 
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
-class ComputedCustomFieldTestCase < ActiveSupport::TestCase
+require File.expand_path('../../../test/test_helper', __dir__)
+require File.expand_path('../../../test/application_system_test_case', __dir__)
+require File.expand_path('fixtures_helper', __dir__)
+require File.expand_path('methods_helper', __dir__)
+
+class ComputableCustomFieldTestCase < ActiveSupport::TestCase
   fixtures FixturesHelper.fixtures
   include MethodsHelper
 end
-
-UI_TEST_CASE_CLASS = if Rails::VERSION::MAJOR >= 5
-                       require File.expand_path(File.dirname(__FILE__) + '/../../../test/application_system_test_case')
-                       ApplicationSystemTestCase
-                     else
-                       require File.expand_path(File.dirname(__FILE__) + '/../../../test/ui/base')
-                       Redmine::UiTest::Base
-                     end

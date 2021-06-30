@@ -4,7 +4,7 @@
 # Redmine plugin for xmera called Computable Custom Field Plugin.
 #
 # Copyright (C) 2021 Liane Hampe <liaham@xmera.de>, xmera.
-# 
+#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -19,29 +19,23 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
-class MathFunction
-  def initialize(name:, fragments:, context:)
-    @name = name
-    @fragments = fragments
-    @context = context
-  end
+# Extensions
+require 'computable_custom_field/extensions/custom_field_patch'
+require 'computable_custom_field/extensions/custom_fields_helper_patch'
+require 'computable_custom_field/extensions/model_patch'
+require 'computable_custom_field/extensions/field_format_patch'
+require 'computable_custom_field/extensions/formula_support_patch'
 
-  def calculate
-    base_function.calculate
-  end
+# Hooks
+require 'computable_custom_field/hooks/hooks'
 
-  private
+# Overrides
+require 'computable_custom_field/overrides/issue_patch'
+require 'computable_custom_field/overrides/enumeration_format_patch'
 
-  attr_reader :name, :fragments, :context
-
-  ##
-  # The function determined by the formula name, e.g., SumFunction.
-  #
-  def base_function
-    klass.new(fragments: fragments, context: context)
-  end
-
-  def klass
-    name.present? ? "#{name.classify}Function".constantize : NullFunction
-  end
+module ComputableCustomField
+  FORMATS = %w[int float list enumeration].freeze
+  FORMULAS = %w[sum min max product division custom].freeze
+  MODELS = [Enumeration, Group, Issue, Project,
+            TimeEntry, User, Version].freeze
 end

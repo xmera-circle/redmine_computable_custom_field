@@ -4,6 +4,7 @@
 # Redmine plugin for xmera called Computable Custom Field Plugin.
 #
 # Copyright (C) 2021 Liane Hampe <liaham@xmera.de>, xmera.
+# Copyright (C) 2015 - 2021 Yakov Annikov
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,29 +20,24 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
-class MathFunction
-  def initialize(name:, fragments:, context:)
-    @name = name
-    @fragments = fragments
-    @context = context
+module ComputableCustomField
+  module IssuePatch
+    def self.prepended(base)
+      base.prepend(InstanceMethods)
+    end
+
+    module InstanceMethods
+      def read_only_attribute_names(user = nil)
+        cf_ids = CustomField.computed.pluck(:id).map(&:to_s)
+        attributes = super
+        (attributes + cf_ids).uniq
+      end
+    end
   end
+end
 
-  def calculate
-    base_function.calculate
-  end
-
-  private
-
-  attr_reader :name, :fragments, :context
-
-  ##
-  # The function determined by the formula name, e.g., SumFunction.
-  #
-  def base_function
-    klass.new(fragments: fragments, context: context)
-  end
-
-  def klass
-    name.present? ? "#{name.classify}Function".constantize : NullFunction
-  end
+Rails.configuration.to_prepare do
+  patch = ComputableCustomField::IssuePatch
+  klass = Issue
+  klass.prepend patch unless klass.included_modules.include?(patch)
 end

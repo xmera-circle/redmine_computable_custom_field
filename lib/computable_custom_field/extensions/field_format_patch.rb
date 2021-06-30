@@ -19,29 +19,27 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
-class MathFunction
-  def initialize(name:, fragments:, context:)
-    @name = name
-    @fragments = fragments
-    @context = context
+module ComputableCustomField
+  module FieldFormatPatch
+    def self.included(base)
+      base.extend(ClassMethods)
+    end
+
+    module ClassMethods
+      def supported_math_functions=(*math_functions)
+        @supported_math_functions =
+          (math_functions.flatten.map(&:to_s) & Formula.available_names)
+      end
+
+      def supported_math_functions
+        @supported_math_functions || []
+      end
+    end
   end
+end
 
-  def calculate
-    base_function.calculate
-  end
-
-  private
-
-  attr_reader :name, :fragments, :context
-
-  ##
-  # The function determined by the formula name, e.g., SumFunction.
-  #
-  def base_function
-    klass.new(fragments: fragments, context: context)
-  end
-
-  def klass
-    name.present? ? "#{name.classify}Function".constantize : NullFunction
-  end
+Rails.configuration.to_prepare do
+  patch = ComputableCustomField::FieldFormatPatch
+  klass = Redmine::FieldFormat::Base
+  klass.include patch unless klass.included_modules.include?(patch)
 end
