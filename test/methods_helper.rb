@@ -45,13 +45,55 @@ module MethodsHelper
     computed_field 'int'
   end
 
-  def computed_field(format, attributes = {})
+  def field_with_enumeration_format
+    computed_field_enumeration(
+      is_computed: true,
+      attributes: {},
+      enumerations: {
+        '1': { name: 'result1' },
+        '2': { name: 'result2' },
+        '3': { name: 'result3' },
+        '4': { name: 'result4' },
+        '5': { name: 'result5' },
+        '6': { name: 'result6' },
+        '7': { name: 'result7' },
+        '8': { name: 'result8' },
+        '9': { name: 'result9' }
+      }
+      # enumerations: {
+      #   '1': { name: 'result1', position: 1 },
+      #   '2': { name: 'result2', position: 2 },
+      #   '3': { name: 'result3', position: 3 },
+      #   '4': { name: 'result4', position: 4 },
+      #   '5': { name: 'result5', position: 5 },
+      #   '6': { name: 'result6', position: 6 },
+      #   '7': { name: 'result7', position: 7 },
+      #   '8': { name: 'result8', position: 8 },
+      #   '9': { name: 'result9', position: 9 }
+      # }
+    )
+  end
+
+  def computed_field(format, is_computed: true, attributes: {})
     @generated_field_name ||= +"#{format.capitalize} Field 0"
     @generated_field_name.succ!
-    params = attributes.merge(name: @generated_field_name, is_computed: true,
+    params = attributes.merge(name: @generated_field_name, is_computed: is_computed,
                               field_format: format, is_for_all: true)
     field = IssueCustomField.create params
     field.trackers << Tracker.first if field.is_a? IssueCustomField
+    field
+  end
+
+  ##
+  # @param enumerations [Hash] {'1': { name: 'enumeration1', position: 0 },
+  #                             '2': { name: 'enumeration2', position: 1 } }
+  #
+  def computed_field_enumeration(is_computed: true, attributes: {}, enumerations: {})
+    field = computed_field 'enumeration', is_computed: is_computed, attributes: attributes
+    enumerations.each do |_key, values|
+      field.enumerations.build(values)
+    end
+    field.save
     field
   end
 end

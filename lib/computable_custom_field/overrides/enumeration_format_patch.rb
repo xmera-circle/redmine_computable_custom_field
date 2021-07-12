@@ -38,7 +38,7 @@ module ComputableCustomField
 
         target_class
           .where(custom_field_id: custom_field.id)
-          .where(position: value.to_i - 1)
+          .where(position: value.to_i)
           .take
       end
     end
