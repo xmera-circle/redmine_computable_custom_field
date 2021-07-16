@@ -60,17 +60,6 @@ module MethodsHelper
         '8': { name: 'result8' },
         '9': { name: 'result9' }
       }
-      # enumerations: {
-      #   '1': { name: 'result1', position: 1 },
-      #   '2': { name: 'result2', position: 2 },
-      #   '3': { name: 'result3', position: 3 },
-      #   '4': { name: 'result4', position: 4 },
-      #   '5': { name: 'result5', position: 5 },
-      #   '6': { name: 'result6', position: 6 },
-      #   '7': { name: 'result7', position: 7 },
-      #   '8': { name: 'result8', position: 8 },
-      #   '9': { name: 'result9', position: 9 }
-      # }
     )
   end
 
@@ -85,8 +74,8 @@ module MethodsHelper
   end
 
   ##
-  # @param enumerations [Hash] {'1': { name: 'enumeration1', position: 0 },
-  #                             '2': { name: 'enumeration2', position: 1 } }
+  # @param enumerations [Hash] {'1': { name: 'enumeration1' },
+  #                             '2': { name: 'enumeration2' } }
   #
   def computed_field_enumeration(is_computed: true, attributes: {}, enumerations: {})
     field = computed_field 'enumeration', is_computed: is_computed, attributes: attributes
