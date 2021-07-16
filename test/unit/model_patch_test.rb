@@ -93,11 +93,6 @@ class ModelPatchTest < ComputableCustomFieldTestCase
         '2': { name: 'value2' },
         '3': { name: 'value3' }
       }
-      # enumerations: {
-      #   '1': { name: 'value1', position: 1 },
-      #   '2': { name: 'value2', position: 2 },
-      #   '3': { name: 'value3', position: 3 }
-      # }
     )
   end
 end
