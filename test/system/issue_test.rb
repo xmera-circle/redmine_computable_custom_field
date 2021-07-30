@@ -22,7 +22,7 @@
 
 require File.expand_path('../test_helper', __dir__)
 
-class ComputableCustomFieldTest < ApplicationSystemTestCase
+class IssueTest < ApplicationSystemTestCase
   fixtures FixturesHelper.fixtures
   include MethodsHelper
 
