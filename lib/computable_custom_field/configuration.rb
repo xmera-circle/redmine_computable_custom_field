@@ -17,32 +17,41 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
-class MathFunction
-  def initialize(name:, fragments:, context:, custom_field:)
-    @name = name
-    @fragments = fragments
-    @context = context
-    @custom_field = custom_field
-  end
+module ComputableCustomField
+  module Configuration
+    class << self
+      attr_reader :formats, :formulas
 
-  def calculate
-    base_function.calculate
-  end
+      def models=(*values)
+        @models = values.flatten
+      end
 
-  private
+      def models
+        @models.map(&:constantize)
+      end
 
-  attr_reader :name, :fragments, :context, :custom_field
+      def formats=(*values)
+        @formats = values.flatten
+      end
 
-  ##
-  # The function determined by the formula name, e.g., SumFunction.
-  #
-  def base_function
-    klass.new(fragments: fragments, custom_field: custom_field, context: context)
-  end
+      def formulas=(*values)
+        @formulas = values.flatten
+      end
+    end
 
-  def klass
-    name.present? ? "#{name.classify}Function".constantize : NullFunction
+    class Support
+      attr_reader :format, :formulas
+
+      def initialize(format:, formulas:)
+        @format = format
+        @formulas = formulas
+      end
+
+      def klass
+        "Redmine::FieldFormat::#{format.classify}Format".constantize
+      end
+    end
   end
 end

@@ -16,3 +16,4 @@ de:
   error_invalid_arguments: Ungültige Formelsyntax
   error_unsupported_field_format: Ungeignetes Format für ein oder mehrere Felder
   error_invalid_field: Ungeeignetes Feld
+  error_too_many_fields: Zu viele Felder

@@ -24,23 +24,22 @@ require File.expand_path('../test_helper', __dir__)
 
 class ModelPatchTest < ComputableCustomFieldTestCase
   test 'patch inclusion' do
-    models = ComputableCustomField::MODELS
+    models = ComputableCustomField::Configuration.models
     assert_equal 1, models.size
     models.each do |model|
       assert model.included_modules.include?(ComputableCustomField::ModelPatch)
     end
   end
 
-  test 'floath with division by zero' do
-    field = field_with_float_format
-    field.update(formula: 'custom(cfs[6]/cfs[1])')
+  test 'float with division by zero' do
+    field = field_with_float_format(formula: 'custom(cfs[6]/cfs[1])')
     issue.save
     assert_equal 'Infinity', issue.custom_field_value(field.id)
   end
 
   test 'sum with int format' do
-    field = field_with_int_format
     formula = 'sum(cfs[6],cfs[6],cfs[6])'
+    field = field_with_int_format(formula: formula)
     result = (3 * issue.custom_field_value(6).to_f)
     field.update_attribute(:formula, formula)
     issue.save
@@ -48,8 +47,8 @@ class ModelPatchTest < ComputableCustomFieldTestCase
   end
 
   test 'sum with float format' do
-    field = field_with_float_format
     formula = 'sum(cfs[6],cfs[6])'
+    field = field_with_float_format(formula: formula) 
     result = (2 * issue.custom_field_value(6).to_f)
     field.update_attribute(:formula, formula)
     issue.save
@@ -72,8 +71,8 @@ class ModelPatchTest < ComputableCustomFieldTestCase
                                        customized_type: Issue)
     second_value.save
     assert issue.save_custom_field_values
-    result_field = field_with_enumeration_format
     formula = "product(cfs[#{first_value_field.id}], cfs[#{second_value_field.id}])"
+    result_field = field_with_enumeration_format(formula: formula)
     # first_value * second_value <=> 2 * 3 <=> 6
     result = ((first_ids.index(first_ids[1]) + 1) * (second_ids.index(second_ids[2]) + 1)).to_f
     assert_equal 6.0.to_s, result.to_s
@@ -87,11 +86,12 @@ class ModelPatchTest < ComputableCustomFieldTestCase
   def custom_field_enumeration
     computed_field_enumeration(
       is_computed: false,
-      attributes: {},
-      enumerations: {
-        '1': { name: 'value1' },
-        '2': { name: 'value2' },
-        '3': { name: 'value3' }
+      attributes: {
+        enumerations: {
+          '1': { name: 'value1' },
+          '2': { name: 'value2' },
+          '3': { name: 'value3' }
+        }
       }
     )
   end

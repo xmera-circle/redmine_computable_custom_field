@@ -24,7 +24,7 @@ require 'computable_custom_field/extensions/custom_field_patch'
 require 'computable_custom_field/extensions/custom_fields_helper_patch'
 require 'computable_custom_field/extensions/model_patch'
 require 'computable_custom_field/extensions/field_format_patch'
-require 'computable_custom_field/extensions/formula_support_patch'
+#require 'computable_custom_field/extensions/formula_support_patch'
 
 # Hooks
 require 'computable_custom_field/hooks/hooks'
@@ -33,8 +33,38 @@ require 'computable_custom_field/hooks/hooks'
 require 'computable_custom_field/overrides/issue_patch'
 require 'computable_custom_field/overrides/enumeration_format_patch'
 
+require 'computable_custom_field/configuration'
+
 module ComputableCustomField
-  FORMATS = %w[int float list enumeration].freeze
-  FORMULAS = %w[sum min max product division custom].freeze
-  MODELS = [Issue].freeze
+  module Configuration
+    self.models = %w[Issue]
+    self.formats = %w[int float list enumeration]
+    self.formulas = %w[sum min max product division custom]
+  end
+end
+
+Rails.configuration.to_prepare do
+  default_formulas = %w[sum min max product division custom]
+  supported = []
+  supported << ComputableCustomField::Configuration::Support.new(
+    format: 'int',
+    formulas: default_formulas
+  )
+  supported << ComputableCustomField::Configuration::Support.new(
+    format: 'float',
+    formulas: default_formulas
+  )
+  supported << ComputableCustomField::Configuration::Support.new(
+    format: 'list',
+    formulas: default_formulas
+  )
+  supported << ComputableCustomField::Configuration::Support.new(
+    format: 'enumeration',
+    formulas: default_formulas
+  )
+
+  supported.map do |format|
+    base = format.klass
+    base.supported_math_functions = format.formulas
+  end
 end

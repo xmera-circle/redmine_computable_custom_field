@@ -20,8 +20,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 class BaseFunction
-  def initialize(fragments:, context: nil)
+  def initialize(fragments:, custom_field:, context: nil)
     @fragments = fragments
+    @custom_field = custom_field
     @context = context
   end
 
@@ -29,9 +30,32 @@ class BaseFunction
     raise NotImplementedError, "#{__method__} needs to be implemented"
   end
 
+  def available_operators
+    []
+  end
+
+  def available_delimiters
+    []
+  end
+
+  def available_signs
+    []
+  end
+
+  ##
+  # Returning -1 means no restrictions.
+  #
+  def max_num_of_fields
+    -1
+  end
+
+  def unlimited_fields?
+    max_num_of_fields == -1
+  end
+
   private
 
-  attr_reader :fragments, :context
+  attr_reader :fragments, :custom_field, :context
 
   def values
     cfs = context.cfs
