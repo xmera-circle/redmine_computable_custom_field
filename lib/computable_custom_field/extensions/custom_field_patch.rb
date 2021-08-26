@@ -27,7 +27,7 @@ module ComputableCustomField
         base.before_validation -> { self.formula ||= '' }, if: :is_computed?
         base.validates_with ::FormulaValidator, if: :is_computed?
         base.safe_attributes 'is_computed', 'formula' if CustomField.respond_to? 'safe_attributes'
-        base.scope :computable, -> { where(is_computed: false).where(field_format: ComputableCustomField::FORMATS) }
+        base.scope :computable, -> { where(is_computed: false).where(field_format: ComputableCustomField::Configuration.formats) }
         base.scope :computable_group_by_id, -> { computable.group_by.map(&:id) }
         base.scope :computed, -> { where(is_computed: true) }
       end
@@ -43,7 +43,7 @@ module ComputableCustomField
     end
 
     def valid_format_for_computation?
-      format_in?(*ComputableCustomField::FORMATS)
+      format_in?(*ComputableCustomField::Configuration.formats)
     end
 
     def fields_for_select
@@ -53,7 +53,7 @@ module ComputableCustomField
     private
 
     def type_from_class_name
-      self.class.name.scan(Regexp.new(ComputableCustomField::MODELS.join('|')))
+      self.class.name.scan(Regexp.new(ComputableCustomField::Configuration.models.join('|')))
     end
   end
 end

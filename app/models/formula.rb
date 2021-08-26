@@ -23,7 +23,7 @@ class Formula
   include Redmine::I18n
 
   def self.available_names
-    ComputableCustomField::FORMULAS
+    ComputableCustomField::Configuration.formulas
   end
 
   def self.name_pattern
@@ -60,7 +60,7 @@ class Formula
   attr_reader :expression
 
   def matched_data
-    expression.match(self.class.name_pattern) || empty_data
+    expression&.match(self.class.name_pattern) || empty_data
   end
 
   def empty_data

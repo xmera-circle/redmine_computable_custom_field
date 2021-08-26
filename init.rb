@@ -31,11 +31,3 @@ Redmine::Plugin.register :redmine_computable_custom_field do
   requires_redmine version_or_higher: '4.2.1'
   requires_redmine_plugin :redmine_base_deface, version_or_higher: '1.6.2'
 end
-
-Rails.configuration.to_prepare do
-  patch = ComputableCustomField::ModelPatch
-  klasses = ComputableCustomField::MODELS
-  klasses.each do |klass|
-    klass.include patch unless klass.included_modules.include?(patch)
-  end
-end
