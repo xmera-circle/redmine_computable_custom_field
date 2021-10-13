@@ -40,15 +40,17 @@ module ComputableCustomField
       assert_not field.valid?
     end
 
-    test 'should confirm valid custom formulas' do
-      (ComputableCustomField::FORMULAS - %w[custom]).each do |formula|
-        field = field_validation(formula: "#{formula}(cfs[6],cfs[6],cfs[6])",
-                                 field_format: 'float')
+    test 'should confirm valid formulas' do
+      %w[int float list enumeration].each do |format|
+        %w[sum min max product division].each do |formula|
+          field = field_validation(formula: "#{formula}(cfs[6],cfs[6],cfs[6])",
+                                   field_format: format)
+          assert field.valid?
+        end
+        field = field_validation(formula: 'custom(cfs[6]+cfs[6]-cfs[6])',
+                                 field_format: format)
         assert field.valid?
       end
-      field = field_validation(formula: 'custom(cfs[6]+cfs[6]-cfs[6])',
-                               field_format: 'float')
-      assert field.valid?
     end
 
     test 'should reject missing custom field ids' do
@@ -72,9 +74,7 @@ module ComputableCustomField
     private
 
     def field_validation(formula:, field_format:)
-      field = public_send "field_with_#{field_format}_format"
-      field.update(formula: formula)
-      field
+      public_send "field_with_#{field_format}_format", formula: formula
     end
   end
 end

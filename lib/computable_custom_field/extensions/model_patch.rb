@@ -43,7 +43,7 @@ module ComputableCustomField
     # it accessable within the records custom field values.
     #
     def calculate_computable_field(custom_field)
-      value = calculator(custom_field.formula).calculate
+      value = calculator(custom_field).calculate
       self.custom_field_values = {
         custom_field.id => value
       }
@@ -52,8 +52,8 @@ module ComputableCustomField
     ##
     # Instantiate a CustomFieldCalculator.
     #
-    def calculator(formula)
-      CustomFieldCalculator.new(formula: formula,
+    def calculator(custom_field)
+      CustomFieldCalculator.new(custom_field: custom_field,
                                 fields: custom_field_values,
                                 grouped_fields: grouped_fields)
     end
@@ -66,5 +66,13 @@ module ComputableCustomField
     def grouped_fields
       custom_field_values.group_by { |cfv| cfv.custom_field.id }
     end
+  end
+end
+
+Rails.configuration.to_prepare do
+  patch = ComputableCustomField::ModelPatch
+  klasses = ComputableCustomField::Configuration.models
+  klasses.each do |klass|
+    klass.include patch unless klass.included_modules.include?(patch)
   end
 end

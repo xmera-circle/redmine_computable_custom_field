@@ -52,10 +52,7 @@ class IssueTest < ApplicationSystemTestCase
   private
 
   def field
-    int_field = field_with_int_format
-    int_field.update(formula: 'sum(cfs[6], cfs[6]')
-    int_field.save
-    int_field
+    field_with_int_format(formula: 'sum(cfs[6], cfs[6]')
   end
 
   def update_project(issue_custom_field_id:)

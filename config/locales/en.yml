@@ -16,3 +16,4 @@ en:
   error_invalid_arguments: Invalid formula syntax
   error_unsupported_field_format: Invalid format for at least one field
   error_invalid_field: Invalid field
+  error_too_many_fields: Too many fields

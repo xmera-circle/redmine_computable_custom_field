@@ -26,16 +26,8 @@ Redmine::Plugin.register :redmine_computable_custom_field do
   name 'Computable custom field'
   author 'Yakov Annikov, Liane Hampe'
   description 'Simple calculations with custom fields'
-  version '3.0.1'
+  version '3.0.2'
 
   requires_redmine version_or_higher: '4.2.1'
   requires_redmine_plugin :redmine_base_deface, version_or_higher: '1.6.2'
-end
-
-Rails.configuration.to_prepare do
-  patch = ComputableCustomField::ModelPatch
-  klasses = ComputableCustomField::MODELS
-  klasses.each do |klass|
-    klass.include patch unless klass.included_modules.include?(patch)
-  end
 end

@@ -20,11 +20,12 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 class CustomFieldCalculator
-  def initialize(formula:, fields:, grouped_fields:)
-    @formula = Formula.new(expression: formula)
+  def initialize(custom_field:, fields:, grouped_fields:)
+    @custom_field = custom_field
+    @formula = Formula.new(expression: custom_field.formula)
     @fields = fields
     @grouped_fields = grouped_fields
-    @fragments = FormulaFragment.new(arguments: self.formula.arguments)
+    @fragments = FormulaFragment.new(arguments: formula.arguments)
     @context = FormulaContext.new(field_ids: fragments.ids,
                                   grouped_fields: self.grouped_fields,
                                   available_fields: self.fields)
@@ -33,10 +34,11 @@ class CustomFieldCalculator
   def calculate
     MathFunction.new(name: formula.name,
                      fragments: fragments,
-                     context: context).calculate
+                     context: context,
+                     custom_field: custom_field).calculate
   end
 
   private
 
-  attr_reader :formula, :fields, :grouped_fields, :fragments, :context
+  attr_reader :custom_field, :formula, :fields, :grouped_fields, :fragments, :context
 end

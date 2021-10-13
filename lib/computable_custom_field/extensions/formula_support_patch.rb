@@ -28,8 +28,8 @@ module ComputableCustomField
 end
 
 Rails.configuration.to_prepare do
-  klasses = ComputableCustomField::FORMATS.map do |format|
-    "Redmine::FieldFormat::#{format.capitalize}Format".constantize
+  klasses = ComputableCustomField::Configuration.formats.map do |format|
+    "Redmine::FieldFormat::#{format.classify}Format".constantize
   end
   patch = ComputableCustomField::FormulaSupportPatch
   klasses.each do |klass|

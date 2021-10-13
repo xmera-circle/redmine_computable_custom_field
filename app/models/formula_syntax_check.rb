@@ -31,6 +31,7 @@ class FormulaSyntaxCheck
     return if record.errors.any?
 
     record.errors.add :base, l(:error_invalid_arguments) unless valid_syntax?
+    record.errors.add :base, l(:error_too_many_fields) if too_many_fields?
   end
 
   private
@@ -39,6 +40,12 @@ class FormulaSyntaxCheck
 
   def valid_syntax?
     (operators & operator).present? || (delimiters & delimiter).present?
+  end
+
+  def too_many_fields?
+    return if base_function.unlimited_fields?
+
+    base_function.max_num_of_fields < fragments.ids.count
   end
 
   def operator
@@ -61,7 +68,7 @@ class FormulaSyntaxCheck
   # The function determined by the formula name, e.g., SumFunction.
   #
   def base_function
-    klass.new(fragments: fragments, context: nil)
+    klass.new(fragments: fragments, custom_field: nil, context: nil)
   end
 
   def klass
