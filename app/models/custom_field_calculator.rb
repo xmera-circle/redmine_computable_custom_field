@@ -27,8 +27,8 @@ class CustomFieldCalculator
     @grouped_fields = grouped_fields
     @fragments = FormulaFragment.new(arguments: formula.arguments)
     @context = FormulaContext.new(field_ids: fragments.ids,
-                                  grouped_fields: self.grouped_fields,
-                                  available_fields: self.fields)
+                                  grouped_fields: grouped_fields,
+                                  available_fields: fields)
   end
 
   def calculate
