@@ -22,6 +22,12 @@
 
 module ComputableCustomField
   module CustomFieldsHelperPatch
+    def computable?(custom_field)
+      custom_field.valid_type_for_computation? &&
+        custom_field.valid_format_for_computation? &&
+        (custom_field.new_record? || custom_field.is_computed?)
+    end
+
     def render_computable_custom_fields_select(custom_field)
       options = render_options_for_computable_custom_fields_select(custom_field)
       select_tag '', options, size: 5, multiple: true, id: 'available_cfs'
