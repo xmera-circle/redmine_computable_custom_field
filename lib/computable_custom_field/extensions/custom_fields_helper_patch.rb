@@ -29,7 +29,7 @@ module ComputableCustomField
     end
 
     def checked_by_default?(custom_field)
-      custom_field.is_computed? || computed_by_default.includes?(custom_field.field_format)
+      custom_field.is_computed? || computed_by_default&.include?(custom_field.field_format)
     end
 
     def computed_by_default

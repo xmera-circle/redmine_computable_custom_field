@@ -71,6 +71,15 @@ module ComputableCustomField
       assert_not field.valid?
     end
 
+    test 'should reject custom_field_ids where multiple is true' do
+      multiple_field = IssueCustomField.generate!(field_format: 'list',
+                                                  possible_values: %w[1 2],
+                                                  multiple: true)
+      field = field_validation(formula: "custom(cfs[#{multiple_field.id}] * 2)",
+                               field_format: 'float')
+      assert_not field.valid?
+    end
+
     private
 
     def field_validation(formula:, field_format:)

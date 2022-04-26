@@ -34,10 +34,12 @@ class ComputableCustomFieldTest < ApplicationSystemTestCase
 
   def test_new_custom_field_page_should_have_additional_fields
     visit new_custom_field_path type: 'IssueCustomField'
+
     within('#custom_field_form') do
       select 'Float', from: 'Format'
       page.fill_in('Name', with: 'Computed')
     end
+
     assert page.has_css?('input#custom_field_is_computed')
     assert page.has_css?('textarea#custom_field_formula')
     assert page.has_css?('select#available_cfs')
