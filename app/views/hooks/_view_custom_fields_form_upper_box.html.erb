@@ -24,6 +24,7 @@
   <%=tag.p do %>
     <%= form.check_box :is_computed,
                         data: { enables: '#custom_field_formula, #available_cfs' },
+                        checked: checked_by_default?(custom_field),
                         disabled: !custom_field.new_record? %>
   <% end %>
   <%=tag.p do %>
