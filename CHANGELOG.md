@@ -7,10 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## unreleased
 
+### Added
+
+* CustomFieldsHelper#computed_by_default to allow certain types to extend the
+  field format list when they should be checked as computed by default 
+
 ### Fixed
 
 * computable fields on custom field form to show up only when the field is
   computable
+* usage of instance variables with self.(var_name) in initializer which throws
+  an error in Ruby 2.6.x
 
 ## 3.0.3 - 2021-12-03
 
