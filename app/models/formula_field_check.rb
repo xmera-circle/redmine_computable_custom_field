@@ -28,7 +28,9 @@ class FormulaFieldCheck
 
   def validate(record)
     record.errors.add :base, l(:error_invalid_field) unless available_fields?(record)
-    results = custom_fields(record).map(&:valid_format_for_computation?)
+    formats = custom_fields(record).map(&:valid_format_for_computation?)
+    attrs = custom_fields(record).map(&:valid_attributes_for_computation?)
+    results = formats | attrs
     record.errors.add :base, l(:error_unsupported_field_format) unless results.all?
   end
 
