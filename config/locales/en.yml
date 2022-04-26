@@ -14,6 +14,6 @@ en:
   error_missing_fields: Fields are required
   error_missing_arguments: Invalid operators or delimiters
   error_invalid_arguments: Invalid formula syntax
-  error_unsupported_field_format: Invalid format for at least one field
+  error_unsupported_field_format: Invalid format or setting (i.e. Multiple values) for at least one field
   error_invalid_field: Invalid field
   error_too_many_fields: Too many fields

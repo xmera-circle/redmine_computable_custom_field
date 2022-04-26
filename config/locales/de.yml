@@ -14,6 +14,6 @@ de:
   error_missing_fields: Felder müssen angegeben werden
   error_missing_arguments: Ungültige Operatoren oder Trennzeichen
   error_invalid_arguments: Ungültige Formelsyntax
-  error_unsupported_field_format: Ungeignetes Format für ein oder mehrere Felder
+  error_unsupported_field_format: Ungeignetes Format oder Einstellung (z.B. Mehrere Werte) für ein oder mehrere Felder
   error_invalid_field: Ungeeignetes Feld
   error_too_many_fields: Zu viele Felder

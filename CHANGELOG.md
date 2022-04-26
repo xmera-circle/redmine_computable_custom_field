@@ -10,7 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * CustomFieldsHelper#computed_by_default to allow certain types to extend the
-  field format list when they should be checked as computed by default 
+  field format list when they should be checked as computed by default
+* validation to check whether a field listed in the formla will have checked
+  to allow multiple values
 
 ### Fixed
 
