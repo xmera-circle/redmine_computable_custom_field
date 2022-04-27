@@ -4,8 +4,10 @@ en:
 
   label_available_custom_fields: Available custom field
 
-  text_supported_formulas: 'The formula min(), max(), sum(), product(), division(), 
-    custom() are supported. Examples: sum(cfs[1], cfs[2]), custom(cfs[1] + cfs[2] * cfs[3])'
+  text_supported_formulas: "The formulas min(), max(), sum(), product(), division(),
+    custom() are supported. \n
+    Examples: sum(cfs[1], cfs[2]), custom(cfs[1] + cfs[2] * cfs[3]). \n
+    Important: There will be no calculation when one of the fields allows multiple values!"
   text_double_click_on_available_field: Double click on the desired field to 
     transer it to the formula field.
   

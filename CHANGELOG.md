@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## unreleased
 
+### Changed
+
+* value query to ignore arrays in case of a multiple value field
+
 ### Added
 
 * CustomFieldsHelper#computed_by_default to allow certain types to extend the

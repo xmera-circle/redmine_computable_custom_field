@@ -29,5 +29,4 @@ Redmine::Plugin.register :redmine_computable_custom_field do
   version '3.0.3'
 
   requires_redmine version_or_higher: '4.2.1'
-  requires_redmine_plugin :redmine_base_deface, version_or_higher: '1.6.2'
 end
