@@ -3,7 +3,7 @@
 #
 # Redmine plugin for xmera called Computable Custom Field Plugin.
 #
-# Copyright (C) 2021 Liane Hampe <liaham@xmera.de>, xmera.
+# Copyright (C) 2021 - 2022  Liane Hampe <liaham@xmera.de>, xmera.
 # Copyright (C) 2015 - 2021 Yakov Annikov
 #
 # This program is free software; you can redistribute it and/or
@@ -35,6 +35,11 @@ class ComputableCustomFieldTest < ApplicationSystemTestCase
   def test_new_custom_field_page_should_have_additional_fields
     visit new_custom_field_path type: 'IssueCustomField'
 
+    within('#custom_field_form') do
+      select 'Float', from: 'Format'
+      page.fill_in('Name', with: 'Computed')
+    end
+
     assert page.has_css?('input#custom_field_is_computed')
     assert page.has_css?('textarea#custom_field_formula')
     assert page.has_css?('select#available_cfs')
@@ -43,12 +48,22 @@ class ComputableCustomFieldTest < ApplicationSystemTestCase
   def test_disabled_fields
     visit new_custom_field_path type: 'IssueCustomField'
 
+    within('#custom_field_form') do
+      select 'Float', from: 'Format'
+      page.fill_in('Name', with: 'Computed')
+    end
+
     assert formula_element.disabled?
     assert available_cfs_element.disabled?
   end
 
   def test_fields_enabling
     visit new_custom_field_path type: 'IssueCustomField'
+
+    within('#custom_field_form') do
+      select 'Float', from: 'Format'
+      page.fill_in('Name', with: 'Computed')
+    end
 
     computed_element.click
     refute formula_element.disabled?
@@ -90,6 +105,8 @@ class ComputableCustomFieldTest < ApplicationSystemTestCase
   test 'available cfs if any' do
     visit new_custom_field_path type: 'IssueCustomField'
     within('#custom_field_form') do
+      select 'Float', from: 'Format'
+      page.fill_in('Name', with: 'Computed')
       computed_element.click
       find(:css, '#available_cfs').find(:option, 6).double_click
     end

@@ -3,7 +3,7 @@
 #
 # Redmine plugin for xmera called Computable Custom Field Plugin.
 #
-# Copyright (C) 2021 Liane Hampe <liaham@xmera.de>, xmera.
+# Copyright (C) 2021 - 2022  Liane Hampe <liaham@xmera.de>, xmera.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,8 +27,8 @@ class CustomFieldCalculator
     @grouped_fields = grouped_fields
     @fragments = FormulaFragment.new(arguments: formula.arguments)
     @context = FormulaContext.new(field_ids: fragments.ids,
-                                  grouped_fields: self.grouped_fields,
-                                  available_fields: self.fields)
+                                  grouped_fields: grouped_fields,
+                                  available_fields: fields)
   end
 
   def calculate

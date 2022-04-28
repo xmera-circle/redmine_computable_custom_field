@@ -3,7 +3,7 @@
 #
 # Redmine plugin for xmera called Computable Custom Field Plugin.
 #
-# Copyright (C) 2021 Liane Hampe <liaham@xmera.de>, xmera.
+# Copyright (C) 2021 - 2022  Liane Hampe <liaham@xmera.de>, xmera.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -57,9 +57,15 @@ class BaseFunction
 
   attr_reader :fragments, :custom_field, :context
 
+  ##
+  # Reads the custom field values as long as it is a single value.
+  # Multiple values would occour if the underlying custom field has set
+  # the attribute multiple to true. If so, the calculation would return no
+  # result.
+  #
   def values
     cfs = context.cfs
-    out = field_ids.map { |id| cfs[id].to_f }
+    out = field_ids.map { |id| cfs[id].to_f unless cfs[id].is_a? Array }
     out.compact
   end
 

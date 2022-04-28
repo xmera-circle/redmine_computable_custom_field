@@ -3,7 +3,7 @@
 #
 # Redmine plugin for xmera called Computable Custom Field Plugin.
 #
-# Copyright (C) 2021 Liane Hampe <liaham@xmera.de>, xmera.
+# Copyright (C) 2021 - 2022  Liane Hampe <liaham@xmera.de>, xmera.
 # Copyright (C) 2015 - 2021 Yakov Annikov
 #
 # This program is free software; you can redistribute it and/or
@@ -67,6 +67,15 @@ module ComputableCustomField
 
     test 'should reject inapplicable custom_field ids' do
       field = field_validation(formula: 'custom(cfs[8]+cfs[8])',
+                               field_format: 'float')
+      assert_not field.valid?
+    end
+
+    test 'should reject custom_field_ids where multiple is true' do
+      multiple_field = IssueCustomField.generate!(field_format: 'list',
+                                                  possible_values: %w[1 2],
+                                                  multiple: true)
+      field = field_validation(formula: "custom(cfs[#{multiple_field.id}] * 2)",
                                field_format: 'float')
       assert_not field.valid?
     end

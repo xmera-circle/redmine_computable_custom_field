@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 3.0.4 - 2022-04-28
+
+### Changed
+
+* value query to ignore arrays in case of a multiple value field
+
+### Added
+
+* CustomFieldsHelper#computed_by_default to allow certain types to extend the
+  field format list when they should be checked as computed by default
+* validation to check whether a field listed in the formla will have checked
+  to allow multiple values
+* Redmine enumeration format test patch
+
+### Fixed
+
+* computable fields on custom field form to show up only when the field is
+  computable
+* usage of instance variables with self.(var_name) in initializer which throws
+  an error in Ruby 2.6.x
+
 ## 3.0.3 - 2021-12-03
 
 ### Fixed

@@ -3,7 +3,7 @@
 #
 # Redmine plugin for xmera called Computable Custom Field Plugin.
 #
-# Copyright (C) 2021 Liane Hampe <liaham@xmera.de>, xmera.
+# Copyright (C) 2021 - 2022  Liane Hampe <liaham@xmera.de>, xmera.
 # Copyright (C) 2015 - 2021 Yakov Annikov
 #
 # This program is free software; you can redistribute it and/or
@@ -44,6 +44,10 @@ module ComputableCustomField
 
     def valid_format_for_computation?
       format_in?(*ComputableCustomField::Configuration.formats)
+    end
+
+    def valid_attributes_for_computation?
+      !multiple?
     end
 
     def fields_for_select
