@@ -46,6 +46,10 @@ module ComputableCustomField
       format_in?(*ComputableCustomField::Configuration.formats)
     end
 
+    def valid_attributes_for_computation?
+      !multiple?
+    end
+
     def fields_for_select
       self.class.computable
     end

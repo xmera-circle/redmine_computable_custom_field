@@ -57,9 +57,15 @@ class BaseFunction
 
   attr_reader :fragments, :custom_field, :context
 
+  ##
+  # Reads the custom field values as long as it is a single value.
+  # Multiple values would occour if the underlying custom field has set
+  # the attribute multiple to true. If so, the calculation would return no
+  # result.
+  #
   def values
     cfs = context.cfs
-    out = field_ids.map { |id| cfs[id].to_f }
+    out = field_ids.map { |id| cfs[id].to_f unless cfs[id].is_a? Array }
     out.compact
   end
 
