@@ -1,0 +1,6 @@
+# frozen_string_literal: true
+
+class Redmine::EnumerationFieldFormatTest
+  undef_method :test_value_from_keyword_for_multiple_custom_field_should_return_enumeration_ids
+  undef_method :test_edit_tag_with_multiple_should_select_current_values
+end
