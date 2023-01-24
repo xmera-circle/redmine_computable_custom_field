@@ -37,9 +37,9 @@ Thanks to Yakov Annikov for the great idea of making custom fields computable.
 
 ## Licence
 
-Copyright (C) 2021 - 2022 Liane Hampe (<liaham@xmera.de>), xmera.
+Copyright (C) 2021-2023 Liane Hampe (<liaham@xmera.de>), xmera Solutions GmbH.
 
-Copyright (C) 2015 - 2021 Yakov Annikov.
+Copyright (C) 2015-2021 Yakov Annikov.
 
 This plugin program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
