@@ -35,7 +35,7 @@ module ComputableCustomField
         def cast_single_value(custom_field, value, _customized = nil)
           return super unless custom_field.is_computed?
 
-          return unless value.present?
+          return if value.blank?
 
           target_class
             .where(custom_field_id: custom_field.id)

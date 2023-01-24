@@ -27,9 +27,7 @@ class MathFunction
     @custom_field = custom_field
   end
 
-  def calculate
-    base_function.calculate
-  end
+  delegate :calculate, to: :base_function
 
   private
 
