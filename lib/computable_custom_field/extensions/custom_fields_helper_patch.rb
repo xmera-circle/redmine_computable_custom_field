@@ -51,7 +51,9 @@ module ComputableCustomField
         end
         return content_tag(:option, l(:label_no_data), value: ' ', title: l(:label_no_data)) if options.blank?
 
+        # rubocop:disable Rails/OutputSafety
         options.join.html_safe
+        # rubocop:enable Rails/OutputSafety
       end
     end
   end
