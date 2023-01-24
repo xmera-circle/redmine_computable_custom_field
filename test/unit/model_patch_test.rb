@@ -27,7 +27,7 @@ class ModelPatchTest < ComputableCustomFieldTestCase
     models = ComputableCustomField::Configuration.models
     assert_equal 1, models.size
     models.each do |model|
-      assert model.included_modules.include?(ComputableCustomField::ModelPatch)
+      assert model.included_modules.include?(ComputableCustomField::Extensions::ModelPatch)
     end
   end
 

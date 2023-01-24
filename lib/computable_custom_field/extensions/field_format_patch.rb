@@ -20,26 +20,22 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 module ComputableCustomField
-  module FieldFormatPatch
-    def self.included(base)
-      base.extend(ClassMethods)
-    end
-
-    module ClassMethods
-      def supported_math_functions=(*math_functions)
-        @supported_math_functions =
-          (math_functions.flatten.map(&:to_s) & Formula.available_names)
+  module Extensions
+    module FieldFormatPatch
+      def self.included(base)
+        base.extend(ClassMethods)
       end
 
-      def supported_math_functions
-        @supported_math_functions || []
+      module ClassMethods
+        def supported_math_functions=(*math_functions)
+          @supported_math_functions =
+            (math_functions.flatten.map(&:to_s) & Formula.available_names)
+        end
+
+        def supported_math_functions
+          @supported_math_functions || []
+        end
       end
     end
   end
-end
-
-Rails.configuration.to_prepare do
-  patch = ComputableCustomField::FieldFormatPatch
-  klass = Redmine::FieldFormat::Base
-  klass.include patch unless klass.included_modules.include?(patch)
 end

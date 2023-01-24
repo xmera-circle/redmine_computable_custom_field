@@ -20,7 +20,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
-require 'computable_custom_field'
+require File.expand_path('lib/computable_custom_field', __dir__)
 
 Redmine::Plugin.register :redmine_computable_custom_field do
   name 'Computable custom field'
@@ -29,4 +29,7 @@ Redmine::Plugin.register :redmine_computable_custom_field do
   version '3.0.4'
 
   requires_redmine version_or_higher: '4.2.1'
+  requires_redmine_plugin :advanced_plugin_helper, version_or_higher: '0.2.0'
 end
+
+ComputableCustomField.setup
