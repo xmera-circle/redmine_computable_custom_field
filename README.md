@@ -2,7 +2,7 @@
 
 Simple calculations with issue custom fields
 
-![Redmine Plugin Version](https://img.shields.io/badge/Redmine_Plugin-v3.0.4-red) ![Redmine Version](https://img.shields.io/badge/Redmine-v4.x.x-blue) ![Language Support](https://img.shields.io/badge/Languages-en,_de-green) ![Version Stage](https://img.shields.io/badge/Stage-release-important)
+![Redmine Plugin Version](https://img.shields.io/badge/Redmine_Plugin-v3.0.5-red) ![Redmine Version](https://img.shields.io/badge/Redmine-v5.0.x-blue) ![Language Support](https://img.shields.io/badge/Languages-en,_de-green) ![Version Stage](https://img.shields.io/badge/Stage-release-important)
 
 Redmine Computable Custom Field is a plugin which lets the administrator define simple calculation formulas for custom fields.
 

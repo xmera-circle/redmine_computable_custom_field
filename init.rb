@@ -26,7 +26,7 @@ Redmine::Plugin.register :redmine_computable_custom_field do
   name 'Computable custom field'
   author 'Yakov Annikov, Liane Hampe'
   description 'Simple calculations with custom fields'
-  version '3.0.4'
+  version '3.0.5'
 
   requires_redmine version_or_higher: '4.2.1'
   requires_redmine_plugin :advanced_plugin_helper, version_or_higher: '0.2.0'
