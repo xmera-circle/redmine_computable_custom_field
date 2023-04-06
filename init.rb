@@ -29,7 +29,7 @@ Redmine::Plugin.register :redmine_computable_custom_field do
   version '3.0.5'
 
   requires_redmine version_or_higher: '4.2.1'
-  requires_redmine_plugin :advanced_plugin_helper, version_or_higher: '0.2.0'
+  requires_redmine_plugin :advanced_plugin_helper, version_or_higher: '0.4.0'
 end
 
 ComputableCustomField.setup

@@ -2,7 +2,7 @@
 
 Simple calculations with issue custom fields
 
-![Redmine Plugin Version](https://img.shields.io/badge/Redmine_Plugin-v3.0.5-red) ![Redmine Version](https://img.shields.io/badge/Redmine-v5.0.x-blue) ![Language Support](https://img.shields.io/badge/Languages-en,_de-green) ![Version Stage](https://img.shields.io/badge/Stage-release-important)
+![Redmine Plugin Version](https://img.shields.io/badge/Redmine_Plugin-v3.0.5-red) ![Redmine Version](https://img.shields.io/badge/Redmine-v5.0.z-blue) ![Language Support](https://img.shields.io/badge/Languages-en,_de-green) ![Version Stage](https://img.shields.io/badge/Stage-release-important) ![develop](https://github.com/xmera-circle/redmine_computable_custom_field/actions/workflows/5-0-stable.yml/badge.svg)
 
 Redmine Computable Custom Field is a plugin which lets the administrator define simple calculation formulas for custom fields.
 
@@ -13,6 +13,13 @@ Redmine Computable Custom Field is a plugin which lets the administrator define 
 ## Usage
 
 For more examples and usage, please refer to the [official documentation](https://circle.xmera.de/projects/redmine-computable-custom-field/wiki).
+
+### Dependencies
+
+To run the plugin you need the following dependencies installed:
+
+* [Redmine 5.0.z](https://github.com/redmine/redmine)
+* [Advanced Plugin Helper 0.4.z ](https://github.com/xmera-circle/advanced_plugin_helper)
 
 ## Installation
 
