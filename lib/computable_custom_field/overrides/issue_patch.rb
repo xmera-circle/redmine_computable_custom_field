@@ -29,9 +29,9 @@ module ComputableCustomField
 
       module InstanceMethods
         def read_only_attribute_names(user = nil)
-          cf_ids = CustomField.computed.pluck(:id).map(&:to_s)
+          @cf_ids ||= CustomField.computed.pluck(:id).map(&:to_s)
           attributes = super
-          (attributes + cf_ids).uniq
+          (attributes + @cf_ids).uniq
         end
       end
     end
