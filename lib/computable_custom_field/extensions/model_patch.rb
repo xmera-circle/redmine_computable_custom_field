@@ -3,8 +3,8 @@
 #
 # Redmine plugin for xmera called Computable Custom Field Plugin.
 #
-# Copyright (C) 2021 - 2022  Liane Hampe <liaham@xmera.de>, xmera.
-# Copyright (C) 2015 - 2021 Yakov Annikov
+# Copyright (C) 2021-2023  Liane Hampe <liaham@xmera.de>, xmera Solutions GmbH.
+# Copyright (C) 2015-2021 Yakov Annikov
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,58 +21,52 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 module ComputableCustomField
-  module ModelPatch
-    extend ActiveSupport::Concern
+  module Extensions
+    module ModelPatch
+      extend ActiveSupport::Concern
 
-    included do
-      before_validation :calculate_computable_fields
-    end
+      included do
+        before_validation :calculate_computable_fields
+      end
 
-    private
+      private
 
-    def calculate_computable_fields
-      custom_field_values.each do |obj|
-        next unless obj.custom_field.is_computed?
+      def calculate_computable_fields
+        custom_field_values.each do |obj|
+          next unless obj.custom_field.is_computed?
 
-        calculate_computable_field obj.custom_field
+          calculate_computable_field obj.custom_field
+        end
+      end
+
+      ##
+      # Calculate each computable field and assign its prepared value to make
+      # it accessable within the records custom field values.
+      #
+      def calculate_computable_field(custom_field)
+        value = calculator(custom_field).calculate
+        self.custom_field_values = {
+          custom_field.id => value
+        }
+      end
+
+      ##
+      # Instantiate a CustomFieldCalculator.
+      #
+      def calculator(custom_field)
+        CustomFieldCalculator.new(custom_field: custom_field,
+                                  fields: custom_field_values,
+                                  grouped_fields: grouped_fields)
+      end
+
+      ##
+      # Group custom field values by their custom field id.
+      #
+      # @return [Hash(key, Array(CustomFieldValue))]
+      #
+      def grouped_fields
+        custom_field_values.group_by { |cfv| cfv.custom_field.id }
       end
     end
-
-    ##
-    # Calculate each computable field and assign its prepared value to make
-    # it accessable within the records custom field values.
-    #
-    def calculate_computable_field(custom_field)
-      value = calculator(custom_field).calculate
-      self.custom_field_values = {
-        custom_field.id => value
-      }
-    end
-
-    ##
-    # Instantiate a CustomFieldCalculator.
-    #
-    def calculator(custom_field)
-      CustomFieldCalculator.new(custom_field: custom_field,
-                                fields: custom_field_values,
-                                grouped_fields: grouped_fields)
-    end
-
-    ##
-    # Group custom field values by their custom field id.
-    #
-    # @return [Hash(key, Array(CustomFieldValue))]
-    #
-    def grouped_fields
-      custom_field_values.group_by { |cfv| cfv.custom_field.id }
-    end
-  end
-end
-
-Rails.configuration.to_prepare do
-  patch = ComputableCustomField::ModelPatch
-  klasses = ComputableCustomField::Configuration.models
-  klasses.each do |klass|
-    klass.include patch unless klass.included_modules.include?(patch)
   end
 end

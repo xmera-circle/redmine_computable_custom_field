@@ -3,7 +3,7 @@
 #
 # Redmine plugin for xmera called Computable Custom Field Plugin.
 #
-# Copyright (C) 2021 - 2022  Liane Hampe <liaham@xmera.de>, xmera.
+# Copyright (C) 2021-2023  Liane Hampe <liaham@xmera.de>, xmera Solutions GmbH.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,33 +20,29 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 module ComputableCustomField
-  module EnumerationFormatPatch
-    def self.prepended(base)
-      base.prepend(InstanceMethods)
-    end
+  module Overrides
+    module EnumerationFormatPatch
+      def self.prepended(base)
+        base.prepend(InstanceMethods)
+      end
 
-    module InstanceMethods
-      ##
-      # @override Computable key/value fields are using the position number
-      #   as computable entry. Therefore, they must be found by its position
-      #   and custom field id.
-      #
-      def cast_single_value(custom_field, value, _customized = nil)
-        return super unless custom_field.is_computed?
+      module InstanceMethods
+        ##
+        # @override Computable key/value fields are using the position number
+        #   as computable entry. Therefore, they must be found by its position
+        #   and custom field id.
+        #
+        def cast_single_value(custom_field, value, _customized = nil)
+          return super unless custom_field.is_computed?
 
-        return unless value.present?
+          return if value.blank?
 
-        target_class
-          .where(custom_field_id: custom_field.id)
-          .where(position: value.to_i)
-          .take
+          target_class
+            .where(custom_field_id: custom_field.id)
+            .where(position: value.to_i)
+            .take
+        end
       end
     end
   end
-end
-
-Rails.configuration.to_prepare do
-  patch = ComputableCustomField::EnumerationFormatPatch
-  klass = Redmine::FieldFormat::EnumerationFormat
-  klass.prepend patch unless klass.included_modules.include?(patch)
 end

@@ -3,8 +3,8 @@
 #
 # Redmine plugin for xmera called Computable Custom Field Plugin.
 #
-# Copyright (C) 2021 - 2022  Liane Hampe <liaham@xmera.de>, xmera.
-# Copyright (C) 2015 - 2021 Yakov Annikov
+# Copyright (C) 2021-2023  Liane Hampe <liaham@xmera.de>, xmera Solutions GmbH.
+# Copyright (C) 2015-2021 Yakov Annikov
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,13 +20,16 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
-require 'computable_custom_field'
+require File.expand_path('lib/computable_custom_field', __dir__)
 
 Redmine::Plugin.register :redmine_computable_custom_field do
   name 'Computable custom field'
   author 'Yakov Annikov, Liane Hampe'
   description 'Simple calculations with custom fields'
-  version '3.0.4'
+  version '3.0.5'
 
   requires_redmine version_or_higher: '4.2.1'
+  requires_redmine_plugin :advanced_plugin_helper, version_or_higher: '0.4.0'
 end
+
+ComputableCustomField.setup

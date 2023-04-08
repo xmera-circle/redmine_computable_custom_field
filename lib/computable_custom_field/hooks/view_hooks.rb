@@ -3,7 +3,8 @@
 #
 # Redmine plugin for xmera called Computable Custom Field Plugin.
 #
-# Copyright (C) 2021 - 2022  Liane Hampe <liaham@xmera.de>, xmera.
+# Copyright (C) 2021-2023  Liane Hampe <liaham@xmera.de>, xmera Solutions GmbH.
+# Copyright (C) 2015-2021 Yakov Annikov
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,19 +21,10 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 module ComputableCustomField
-  module FormulaSupportPatch
-    def self.included(base)
-      base.supported_math_functions = Formula.available_names
+  module Hooks
+    class ViewHooks < Redmine::Hook::ViewListener
+      render_on :view_custom_fields_form_upper_box,
+                partial: 'hooks/view_custom_fields_form_upper_box'
     end
-  end
-end
-
-Rails.configuration.to_prepare do
-  klasses = ComputableCustomField::Configuration.formats.map do |format|
-    "Redmine::FieldFormat::#{format.classify}Format".constantize
-  end
-  patch = ComputableCustomField::FormulaSupportPatch
-  klasses.each do |klass|
-    klass.include patch unless klass.included_modules.include?(patch)
   end
 end

@@ -3,8 +3,8 @@
 #
 # Redmine plugin for xmera called Computable Custom Field Plugin.
 #
-# Copyright (C) 2021 - 2022  Liane Hampe <liaham@xmera.de>, xmera.
-# Copyright (C) 2015 - 2021 Yakov Annikov
+# Copyright (C) 2021-2023  Liane Hampe <liaham@xmera.de>, xmera Solutions GmbH.
+# Copyright (C) 2015-2021 Yakov Annikov
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ class ModelPatchTest < ComputableCustomFieldTestCase
     models = ComputableCustomField::Configuration.models
     assert_equal 1, models.size
     models.each do |model|
-      assert model.included_modules.include?(ComputableCustomField::ModelPatch)
+      assert model.included_modules.include?(ComputableCustomField::Extensions::ModelPatch)
     end
   end
 

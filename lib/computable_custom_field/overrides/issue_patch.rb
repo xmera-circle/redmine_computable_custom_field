@@ -3,8 +3,8 @@
 #
 # Redmine plugin for xmera called Computable Custom Field Plugin.
 #
-# Copyright (C) 2021 - 2022  Liane Hampe <liaham@xmera.de>, xmera.
-# Copyright (C) 2015 - 2021 Yakov Annikov
+# Copyright (C) 2021-2023  Liane Hampe <liaham@xmera.de>, xmera Solutions GmbH.
+# Copyright (C) 2015-2021 Yakov Annikov
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,23 +21,19 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 module ComputableCustomField
-  module IssuePatch
-    def self.prepended(base)
-      base.prepend(InstanceMethods)
-    end
+  module Overrides
+    module IssuePatch
+      def self.prepended(base)
+        base.prepend(InstanceMethods)
+      end
 
-    module InstanceMethods
-      def read_only_attribute_names(user = nil)
-        cf_ids = CustomField.computed.pluck(:id).map(&:to_s)
-        attributes = super
-        (attributes + cf_ids).uniq
+      module InstanceMethods
+        def read_only_attribute_names(user = nil)
+          @cf_ids ||= CustomField.computed.pluck(:id).map(&:to_s)
+          attributes = super
+          (attributes + @cf_ids).uniq
+        end
       end
     end
   end
-end
-
-Rails.configuration.to_prepare do
-  patch = ComputableCustomField::IssuePatch
-  klass = Issue
-  klass.prepend patch unless klass.included_modules.include?(patch)
 end
