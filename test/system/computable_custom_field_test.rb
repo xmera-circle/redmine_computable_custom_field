@@ -24,7 +24,7 @@ require File.expand_path('../test_helper', __dir__)
 
 class ComputableCustomFieldTest < ApplicationSystemTestCase
   include Redmine::I18n
-  fixtures FixturesHelper.fixtures
+  fixtures ComputableCustomField::FixturesHelper.fixtures
 
   def setup
     super

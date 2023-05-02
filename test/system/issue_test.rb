@@ -23,8 +23,8 @@
 require File.expand_path('../test_helper', __dir__)
 
 class IssueTest < ApplicationSystemTestCase
-  fixtures FixturesHelper.fixtures
-  include MethodsHelper
+  fixtures ComputableCustomField::FixturesHelper.fixtures
+  include ComputableCustomField::MethodsHelper
 
   def setup
     super
