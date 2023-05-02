@@ -20,12 +20,14 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
-module FixturesHelper
-  def self.fixtures
-    %i[projects users email_addresses roles members member_roles
-       trackers projects_trackers enabled_modules issue_statuses issues
-       enumerations custom_fields custom_values custom_fields_trackers
-       watchers journals journal_details versions
-       workflows]
+module ComputableCustomField
+  module FixturesHelper
+    def self.fixtures
+      %i[projects users email_addresses roles members member_roles
+         trackers projects_trackers enabled_modules issue_statuses issues
+         enumerations custom_fields custom_values custom_fields_trackers
+         watchers journals journal_details versions
+         workflows]
+    end
   end
 end

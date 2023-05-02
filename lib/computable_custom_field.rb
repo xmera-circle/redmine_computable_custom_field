@@ -20,19 +20,19 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 # Extensions
-require_relative 'computable_custom_field/extensions/custom_field_patch'
-require_relative 'computable_custom_field/extensions/custom_fields_helper_patch'
-require_relative 'computable_custom_field/extensions/model_patch'
-require_relative 'computable_custom_field/extensions/field_format_patch'
+require File.expand_path('computable_custom_field/extensions/custom_field_patch', __dir__)
+require File.expand_path('computable_custom_field/extensions/custom_fields_helper_patch', __dir__)
+require File.expand_path('computable_custom_field/extensions/model_patch', __dir__)
+require File.expand_path('computable_custom_field/extensions/field_format_patch', __dir__)
 
 # Hooks
-require_relative 'computable_custom_field/hooks/view_hooks'
+require File.expand_path('computable_custom_field/hooks/view_hooks', __dir__)
 
 # Overrides
-require_relative 'computable_custom_field/overrides/issue_patch'
-require_relative 'computable_custom_field/overrides/enumeration_format_patch'
+require File.expand_path('computable_custom_field/overrides/issue_patch', __dir__)
+require File.expand_path('computable_custom_field/overrides/enumeration_format_patch', __dir__)
 
-require_relative 'computable_custom_field/configuration'
+require File.expand_path('computable_custom_field/configuration', __dir__)
 
 module ComputableCustomField
   class << self

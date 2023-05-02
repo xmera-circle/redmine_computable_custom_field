@@ -26,6 +26,6 @@ require File.expand_path('fixtures_helper', __dir__)
 require File.expand_path('methods_helper', __dir__)
 
 class ComputableCustomFieldTestCase < ActiveSupport::TestCase
-  fixtures FixturesHelper.fixtures
-  include MethodsHelper
+  fixtures ComputableCustomField::FixturesHelper.fixtures
+  include ComputableCustomField::MethodsHelper
 end
